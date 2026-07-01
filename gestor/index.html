@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EU⁺ Publica+ · Gestor</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0D0D0D;--bg2:#141414;--bg3:#1A1A1A;--bg4:#202020;
+  --gold:#C4A265;--gold2:#D4B483;
+  --text:#F5F2EC;--muted:#9A8E7A;
+  --border:rgba(196,162,101,0.18);--border2:rgba(196,162,101,0.08);
+  --green:#7AAD66;--orange:#E8720C;--red:#D86A6A;--blue:#4A9BC4;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* LOGIN */
+#loginScreen{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px}
+.login-box{width:100%;max-width:380px;background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:44px 36px;text-align:center;position:relative;overflow:hidden}
+.login-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.login-eyebrow{font-size:0.65rem;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.login-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;margin-bottom:6px}
+.login-title sup{font-size:0.5em;color:var(--gold);vertical-align:super}
+.login-sub{font-size:0.75rem;color:var(--muted);margin-bottom:28px}
+.lf{margin-bottom:14px;text-align:left}
+.lf label{display:block;font-size:0.6rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.lf input{width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:12px 14px;font-size:0.88rem;border-radius:2px;outline:none;font-family:'DM Sans',sans-serif;letter-spacing:0.1em}
+.lf input:focus{border-color:var(--gold)}
+.btn-login{width:100%;background:var(--gold);color:var(--bg);border:none;padding:14px;font-size:0.78rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;border-radius:2px;margin-top:6px}
+.login-erro{font-size:0.75rem;color:var(--red);margin-top:12px;display:none}
+
+/* LAYOUT */
+#gestor{display:none}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:rgba(13,13,13,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600}
+.nav-logo sup{font-size:0.5em;color:var(--gold);vertical-align:super}
+.nav-tag{font-size:0.68rem;color:var(--muted);border-left:1px solid var(--border2);padding-left:14px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.btn-sair{font-size:0.7rem;color:var(--muted);background:none;border:1px solid var(--border2);padding:7px 14px;border-radius:2px;cursor:pointer}
+
+/* TABS */
+.main-tabs{display:flex;gap:2px;padding:0 32px;border-bottom:1px solid var(--border2);background:var(--bg2)}
+.main-tab{padding:14px 20px;font-size:0.78rem;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap}
+.main-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* SEÇÃO CLIENTES */
+.section{padding:28px 32px;display:none}
+.section.active{display:block}
+
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.search-input{background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 14px;font-size:0.82rem;border-radius:2px;outline:none;width:240px;font-family:'DM Sans',sans-serif}
+.search-input:focus{border-color:var(--gold)}
+.filter-sel{background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 12px;font-size:0.78rem;border-radius:2px;outline:none;font-family:'DM Sans',sans-serif;cursor:pointer}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px}
+.stat{background:var(--bg2);border:1px solid var(--border2);border-radius:3px;padding:18px 20px;position:relative;overflow:hidden}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:400;color:var(--gold);line-height:1;margin-bottom:4px}
+.stat-l{font-size:0.7rem;font-weight:300;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em}
+
+/* TABELA CLIENTES */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--bg3)}
+th{padding:12px 14px;font-size:0.62rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-align:left;white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--border2);transition:background 0.15s}
+tbody tr:hover{background:var(--bg2)}
+td{padding:13px 14px;font-size:0.83rem}
+td.muted{color:var(--muted)}
+.badge{display:inline-block;font-size:0.6rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;padding:3px 10px;border-radius:20px}
+.badge-ativo{color:var(--green);background:rgba(122,173,102,0.12);border:1px solid rgba(122,173,102,0.25)}
+.badge-suspenso{color:var(--red);background:rgba(216,106,106,0.1);border:1px solid rgba(216,106,106,0.2)}
+.badge-free{color:var(--muted);background:rgba(154,142,122,0.1);border:1px solid var(--border2)}
+.badge-basico{color:var(--blue);background:rgba(74,155,196,0.1);border:1px solid rgba(74,155,196,0.2)}
+.badge-premium{color:var(--gold);background:rgba(196,162,101,0.1);border:1px solid var(--border)}
+.badge-personalizado{color:var(--orange);background:rgba(232,114,12,0.1);border:1px solid rgba(232,114,12,0.2)}
+.td-actions{display:flex;gap:6px;align-items:center}
+.btn-sm{font-size:0.66rem;font-weight:500;letter-spacing:0.06em;padding:6px 12px;border-radius:2px;cursor:pointer;border:1px solid;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.btn-sm.plano{color:var(--gold);border-color:var(--border);background:none}
+.btn-sm.plano:hover{background:rgba(196,162,101,0.08)}
+.btn-sm.ativar{color:var(--green);border-color:rgba(122,173,102,0.3);background:none}
+.btn-sm.ativar:hover{background:rgba(122,173,102,0.08)}
+.btn-sm.suspender{color:var(--red);border-color:rgba(216,106,106,0.3);background:none}
+.btn-sm.suspender:hover{background:rgba(216,106,106,0.08)}
+.btn-sm.ver{color:var(--muted);border-color:var(--border2);background:none}
+.btn-sm.ver:hover{color:var(--text);border-color:var(--border)}
+
+/* SEÇÃO CONFIGURAÇÕES */
+.config-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.config-card{background:var(--bg2);border:1px solid var(--border2);border-radius:3px;padding:24px}
+.config-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;margin-bottom:4px;color:var(--text)}
+.config-sub{font-size:0.75rem;color:var(--muted);margin-bottom:18px}
+.tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--text);background:var(--bg3);border:1px solid var(--border2);border-radius:2px;padding:4px 10px}
+.tag-del{cursor:pointer;color:var(--muted);font-size:14px;line-height:1}
+.tag-del:hover{color:var(--red)}
+.add-tag-row{display:flex;gap:8px}
+.add-tag-input{flex:1;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:8px 10px;font-size:0.8rem;border-radius:2px;outline:none;font-family:'DM Sans',sans-serif}
+.add-tag-input:focus{border-color:var(--gold)}
+.add-tag-btn{background:var(--gold);color:var(--bg);border:none;padding:8px 14px;font-size:0.72rem;font-weight:500;cursor:pointer;border-radius:2px}
+
+/* MODAL PLANO */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);z-index:500;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:32px;width:100%;max-width:400px;position:relative}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.modal-close{position:absolute;top:14px;right:18px;font-size:20px;color:var(--muted);cursor:pointer;background:none;border:none}
+.modal h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;margin-bottom:20px}
+.mf{margin-bottom:16px}
+.mf label{display:block;font-size:0.62rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.mf select{width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:11px 13px;font-size:0.85rem;border-radius:2px;outline:none;font-family:'DM Sans',sans-serif}
+.mf select:focus{border-color:var(--gold)}
+.btn-confirmar{width:100%;background:var(--gold);color:var(--bg);border:none;padding:13px;font-size:0.8rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+
+@media(max-width:900px){
+  nav{padding:14px 18px}
+  .nav-tag{display:none}
+  .main-tabs{padding:0 18px;overflow-x:auto}
+  .section{padding:20px 18px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .config-grid{grid-template-columns:1fr}
+  .search-input{width:160px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-eyebrow">Área Restrita</div>
+    <div class="login-title">Publica<sup>+</sup></div>
+    <p class="login-sub">Painel Gestor · EU⁺ Negócio</p>
+    <form onsubmit="loginGestor(event)">
+      <div class="lf">
+        <label>Senha Master</label>
+        <input type="password" id="senhaMaster" required placeholder="••••••••••">
+      </div>
+      <button type="submit" class="btn-login">Acessar Gestor</button>
+      <p class="login-erro" id="loginErro">Senha incorreta.</p>
+    </form>
+  </div>
+</div>
+
+<!-- GESTOR -->
+<div id="gestor">
+  <nav>
+    <div class="nav-brand">
+      <div class="nav-logo">Publica<sup>+</sup></div>
+      <span class="nav-tag">Gestor EU⁺</span>
+    </div>
+    <div class="nav-right">
+      <button class="btn-sair" onclick="sair()">Sair</button>
+    </div>
+  </nav>
+
+  <div class="main-tabs">
+    <div class="main-tab active" onclick="trocarTab(this,'tabClientes')">Clientes</div>
+    <div class="main-tab" onclick="trocarTab(this,'tabConfig')">Configurações</div>
+  </div>
+
+  <!-- CLIENTES -->
+  <div class="section active" id="tabClientes">
+
+    <!-- STATS -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat"><div class="stat-n" id="statTotal">—</div><div class="stat-l">Total de Clientes</div></div>
+      <div class="stat"><div class="stat-n" id="statAtivos">—</div><div class="stat-l">Ativos</div></div>
+      <div class="stat"><div class="stat-n" id="statPremium">—</div><div class="stat-l">Premium</div></div>
+      <div class="stat"><div class="stat-n" id="statFree">—</div><div class="stat-l">Free</div></div>
+    </div>
+
+    <div class="toolbar">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input class="search-input" type="text" id="busca" placeholder="Buscar cliente..." oninput="filtrarClientes()">
+        <select class="filter-sel" id="filtroPlan" onchange="filtrarClientes()">
+          <option value="">Todos os planos</option>
+          <option value="free">Free</option>
+          <option value="basico">Básico</option>
+          <option value="premium">Premium</option>
+          <option value="personalizado">Personalizado</option>
+        </select>
+        <select class="filter-sel" id="filtroStatus" onchange="filtrarClientes()">
+          <option value="">Todos os status</option>
+          <option value="ativo">Ativos</option>
+          <option value="suspenso">Suspensos</option>
+        </select>
+      </div>
+      <button class="btn-sm ver" onclick="carregarClientes()">↻ Atualizar</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Plano</th>
+            <th>Status</th>
+            <th>Uso/Mês</th>
+            <th>Cadastro</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaClientes">
+          <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--muted)">Carregando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CONFIGURAÇÕES -->
+  <div class="section" id="tabConfig">
+    <div class="config-grid">
+      <div class="config-card">
+        <div class="config-title">Tipos de Entrada</div>
+        <div class="config-sub">Tipos disponíveis nos formulários dos clientes</div>
+        <div class="tag-list" id="listaTipos"></div>
+        <div class="add-tag-row">
+          <input class="add-tag-input" id="novoTipo" placeholder="Novo tipo...">
+          <button class="add-tag-btn" onclick="addTag('tipos','novoTipo','listaTipos')">+</button>
+        </div>
+      </div>
+
+      <div class="config-card">
+        <div class="config-title">Status Disponíveis</div>
+        <div class="config-sub">Status que aparecem nas entradas dos clientes</div>
+        <div class="tag-list" id="listaStatus"></div>
+        <div class="add-tag-row">
+          <input class="add-tag-input" id="novoStatus" placeholder="Novo status...">
+          <button class="add-tag-btn" onclick="addTag('status','novoStatus','listaStatus')">+</button>
+        </div>
+      </div>
+
+      <div class="config-card">
+        <div class="config-title">Origens</div>
+        <div class="config-sub">Origens disponíveis nas entradas dos clientes</div>
+        <div class="tag-list" id="listaOrigens"></div>
+        <div class="add-tag-row">
+          <input class="add-tag-input" id="novaOrigem" placeholder="Nova origem...">
+          <button class="add-tag-btn" onclick="addTag('origens','novaOrigem','listaOrigens')">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PLANO -->
+<div class="overlay" id="overlay" onclick="fecharSeFora(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="fecharModal()">×</button>
+    <h3>Alterar Plano</h3>
+    <p style="font-size:0.8rem;color:var(--muted);margin-bottom:20px" id="modalClienteNome"></p>
+    <div class="mf">
+      <label>Novo plano</label>
+      <select id="novoPlano">
+        <option value="free">Free — Teste</option>
+        <option value="basico">Básico — R$29,90/mês</option>
+        <option value="premium">Premium — R$199,90/mês</option>
+        <option value="personalizado">Personalizado</option>
+      </select>
+    </div>
+    <button class="btn-confirmar" onclick="confirmarPlano()">Confirmar alteração</button>
+  </div>
+</div>
+
+<script>
+const API_URL = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
+let senhaGestor = '';
+let todosClientes = [];
+let clienteModal = null;
+let configDados = { tipos:[], status:[], origens:[] };
+
+async function loginGestor(e) {
+  e.preventDefault();
+  const senha = document.getElementById('senhaMaster').value;
+  const erro = document.getElementById('loginErro');
+  erro.style.display = 'none';
+
+  try {
+    const res = await fetch(`${API_URL}?action=verificar_gestor&senha=${encodeURIComponent(senha)}`);
+    const data = await res.json();
+    if (data.status === 'sucesso') {
+      senhaGestor = senha;
+      sessionStorage.setItem('gestor_senha', senha);
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('gestor').style.display = 'block';
+      carregarClientes();
+      carregarConfig();
+    } else {
+      erro.style.display = 'block';
+    }
+  } catch(e) {
+    erro.textContent = 'Erro de conexão.';
+    erro.style.display = 'block';
+  }
+}
+
+window.onload = () => {
+  const s = sessionStorage.getItem('gestor_senha');
+  if (s) {
+    senhaGestor = s;
+    document.getElementById('senhaMaster').value = s;
+    loginGestor({ preventDefault: ()=>{} });
+  }
+};
+
+function sair() {
+  sessionStorage.removeItem('gestor_senha');
+  location.reload();
+}
+
+function trocarTab(el, id) {
+  document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+// ── CLIENTES ──
+async function carregarClientes() {
+  const tbody = document.getElementById('tabelaClientes');
+  tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted)">Carregando...</td></tr>';
+  try {
+    const res = await fetch(`${API_URL}?action=listar_clientes&senha=${encodeURIComponent(senhaGestor)}`);
+    const data = await res.json();
+    todosClientes = data.clientes || [];
+    atualizarStats();
+    renderizarClientes(todosClientes);
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--red);padding:30px">Erro ao carregar.</td></tr>';
+  }
+}
+
+function atualizarStats() {
+  document.getElementById('statTotal').textContent = todosClientes.length;
+  document.getElementById('statAtivos').textContent = todosClientes.filter(c => c.Status === 'ativo').length;
+  document.getElementById('statPremium').textContent = todosClientes.filter(c => c.Plano === 'premium').length;
+  document.getElementById('statFree').textContent = todosClientes.filter(c => c.Plano === 'free').length;
+}
+
+function filtrarClientes() {
+  const busca = document.getElementById('busca').value.toLowerCase();
+  const plano = document.getElementById('filtroPlan').value;
+  const status = document.getElementById('filtroStatus').value;
+
+  const filtrados = todosClientes.filter(c => {
+    const matchBusca = !busca || c.Nome?.toLowerCase().includes(busca) || c.Email?.toLowerCase().includes(busca) || c.ID_Cliente?.toLowerCase().includes(busca);
+    const matchPlano = !plano || c.Plano === plano;
+    const matchStatus = !status || c.Status === status;
+    return matchBusca && matchPlano && matchStatus;
+  });
+  renderizarClientes(filtrados);
+}
+
+function renderizarClientes(lista) {
+  const tbody = document.getElementById('tabelaClientes');
+  if (!lista.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted)">Nenhum cliente encontrado.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = lista.map(c => {
+    const statusBadge = c.Status === 'ativo'
+      ? '<span class="badge badge-ativo">Ativo</span>'
+      : '<span class="badge badge-suspenso">Suspenso</span>';
+    const planoBadge = `<span class="badge badge-${c.Plano}">${c.Plano}</span>`;
+    const btnStatus = c.Status === 'ativo'
+      ? `<button class="btn-sm suspender" onclick="alterarStatus('${c.ID_Cliente}','suspenso')">Suspender</button>`
+      : `<button class="btn-sm ativar" onclick="alterarStatus('${c.ID_Cliente}','ativo')">Ativar</button>`;
+    return `
+    <tr>
+      <td style="font-family:monospace;font-size:0.78rem;color:var(--gold)">${c.ID_Cliente}</td>
+      <td><strong>${c.Nome}</strong></td>
+      <td class="muted">${c.Email}</td>
+      <td>${planoBadge}</td>
+      <td>${statusBadge}</td>
+      <td class="muted">${c.Uso_Mes || 0}</td>
+      <td class="muted" style="font-size:0.75rem">${c.Data_Cadastro || '—'}</td>
+      <td>
+        <div class="td-actions">
+          <button class="btn-sm plano" onclick='abrirModalPlano(${JSON.stringify(c)})'>Plano</button>
+          ${btnStatus}
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+async function alterarStatus(idCliente, status) {
+  await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'atualizar_status', idCliente, status, senha: senhaGestor }) });
+  carregarClientes();
+}
+
+// ── MODAL PLANO ──
+function abrirModalPlano(c) {
+  clienteModal = c;
+  document.getElementById('modalClienteNome').textContent = c.Nome + ' · ' + c.Email;
+  document.getElementById('novoPlano').value = c.Plano;
+  document.getElementById('overlay').classList.add('open');
+}
+function fecharModal() { document.getElementById('overlay').classList.remove('open'); }
+function fecharSeFora(e) { if (e.target.id === 'overlay') fecharModal(); }
+
+async function confirmarPlano() {
+  const plano = document.getElementById('novoPlano').value;
+  await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'atualizar_plano', idCliente: clienteModal.ID_Cliente, plano, senha: senhaGestor }) });
+  fecharModal();
+  carregarClientes();
+}
+
+// ── CONFIG ──
+async function carregarConfig() {
+  try {
+    const res = await fetch(`${API_URL}?action=get_config`);
+    const data = await res.json();
+    if (data.status === 'sucesso') {
+      configDados.tipos = data.config.tipos || [];
+      configDados.status = data.config.status || [];
+      configDados.origens = data.config.locais || [];
+      renderizarTags('listaTipos', configDados.tipos, 'tipos');
+      renderizarTags('listaStatus', configDados.status, 'status');
+      renderizarTags('listaOrigens', configDados.origens, 'origens');
+    }
+  } catch(e) {}
+}
+
+function renderizarTags(containerId, lista, chave) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = lista.map(v => `
+    <span class="tag">${v}
+      <span class="tag-del" onclick="removerTag('${chave}','${v}','${containerId}')">×</span>
+    </span>`).join('');
+}
+
+async function addTag(chave, inputId, containerId) {
+  const valor = document.getElementById(inputId).value.trim();
+  if (!valor) return;
+  await fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'add_opcao', chave, valor }) });
+  if (!configDados[chave]) configDados[chave] = [];
+  if (!configDados[chave].includes(valor)) configDados[chave].push(valor);
+  renderizarTags(containerId, configDados[chave], chave);
+  document.getElementById(inputId).value = '';
+}
+
+function removerTag(chave, valor, containerId) {
+  configDados[chave] = configDados[chave].filter(v => v !== valor);
+  renderizarTags(containerId, configDados[chave], chave);
+  // Não remove da planilha — apenas da visualização local nesta sessão
+}
+</script>
+</body>
+</html>
