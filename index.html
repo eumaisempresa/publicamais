@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="EU⁺ Publica+ — Gerencie o conteúdo do seu laboratório e roadmap de forma simples, diretamente do seu painel.">
+<title>EU⁺ Publica+ · Gerencie seu conteúdo com inteligência</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#161616;--bg2:#1C1C1C;--bg3:#222222;--bg4:#282828;
+  --gold:#C4A265;--gold2:#D4B483;
+  --text:#F5F2EC;--muted:#9A8E7A;
+  --border:rgba(196,162,101,0.18);--border2:rgba(196,162,101,0.08);
+  --green:#7AAD66;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(22,22,22,0.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border2)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--text);text-decoration:none}
+.nav-logo sup{font-size:0.45em;color:var(--gold);vertical-align:super}
+.nav-links{display:flex;align-items:center;gap:8px}
+.nav-link{font-size:0.75rem;font-weight:400;letter-spacing:0.08em;color:var(--muted);text-decoration:none;padding:7px 14px;border-radius:2px;transition:color 0.2s}
+.nav-link:hover{color:var(--text)}
+.nav-cta{font-size:0.75rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--bg);background:var(--gold);text-decoration:none;padding:9px 20px;border-radius:2px;transition:background 0.2s}
+.nav-cta:hover{background:var(--gold2)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:100px 48px 80px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-100px;right:-200px;width:700px;height:700px;background:radial-gradient(circle,rgba(196,162,101,0.08) 0%,transparent 60%);pointer-events:none}
+.hero::after{content:'';position:absolute;right:0;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,transparent,var(--gold),transparent);opacity:0.4}
+.hero-inner{max-width:680px;position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:0.68rem;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:28px}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,7vw,5.5rem);font-weight:300;line-height:1.06;margin-bottom:22px;color:var(--text)}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:clamp(0.95rem,1.8vw,1.1rem);font-weight:300;color:var(--muted);line-height:1.8;max-width:500px;margin-bottom:44px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:52px}
+.btn-primary{display:inline-block;font-size:0.82rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--bg);background:var(--gold);padding:15px 32px;text-decoration:none;border:1px solid var(--gold);border-radius:2px;transition:all 0.2s}
+.btn-primary:hover{background:var(--gold2);border-color:var(--gold2);transform:translateY(-1px)}
+.btn-outline{display:inline-block;font-size:0.82rem;font-weight:400;letter-spacing:0.1em;text-transform:uppercase;color:var(--text);text-decoration:none;border:1px solid rgba(245,242,236,0.15);padding:15px 32px;border-radius:2px;transition:all 0.2s}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.hero-stats{display:flex;gap:36px;flex-wrap:wrap;padding-top:40px;border-top:1px solid var(--border2)}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;color:var(--gold);line-height:1;margin-bottom:4px}
+.stat-l{font-size:0.72rem;font-weight:300;color:var(--muted);max-width:110px;line-height:1.4}
+
+/* SECTIONS */
+.sec{padding:88px 48px;position:relative}
+.sec+.sec{border-top:1px solid var(--border2)}
+.container{max-width:1080px;margin:0 auto}
+.sec-label{font-size:0.65rem;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.sec-label::before{content:'';width:18px;height:1px;background:var(--gold)}
+.sec h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:400;color:var(--text);margin-bottom:14px;line-height:1.12}
+.sec h2 em{font-style:italic;color:var(--gold)}
+.sec-sub{font-size:0.9rem;font-weight:300;color:var(--muted);line-height:1.78;max-width:520px;margin-bottom:48px}
+
+/* FEATURES */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.feat{background:var(--bg2);padding:32px 26px;position:relative;overflow:hidden;transition:background 0.3s}
+.feat:first-child{border-radius:3px 0 0 3px}
+.feat:last-child{border-radius:0 3px 3px 0}
+.feat:hover{background:var(--bg3)}
+.feat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity 0.3s}
+.feat:hover::before{opacity:1}
+.feat-icon{width:40px;height:40px;border:1px solid var(--border);border-radius:2px;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--gold);margin-bottom:20px}
+.feat h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--text);margin-bottom:10px}
+.feat p{font-size:0.83rem;font-weight:300;color:var(--muted);line-height:1.7}
+
+/* COMO FUNCIONA */
+.steps{display:flex;flex-direction:column;gap:2px}
+.step{display:grid;grid-template-columns:72px 1fr;background:var(--bg2);overflow:hidden;border-radius:2px;transition:background 0.2s}
+.step:hover{background:var(--bg3)}
+.step-n{background:var(--bg3);border-right:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;font-style:italic;color:rgba(196,162,101,0.3);padding:26px 0}
+.step-body{padding:26px 32px}
+.step-label{font-size:0.6rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.step-body h3{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:var(--text);margin-bottom:6px}
+.step-body p{font-size:0.83rem;font-weight:300;color:var(--muted);line-height:1.7}
+
+/* PLANOS */
+.planos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.plano-card{border:1px solid var(--border2);border-radius:3px;padding:28px 22px;background:var(--bg2);position:relative;overflow:hidden;transition:border-color 0.25s,transform 0.2s}
+.plano-card:hover{border-color:var(--border);transform:translateY(-2px)}
+.plano-card.destaque{border-color:var(--gold)}
+.plano-card.destaque::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.plano-badge{font-size:0.58rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:block}
+.plano-nome{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--text);margin-bottom:6px}
+.plano-preco-de{font-size:0.75rem;color:var(--muted);text-decoration:line-through;margin-bottom:2px}
+.plano-preco{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:400;color:var(--gold);line-height:1;margin-bottom:4px}
+.plano-preco span{font-size:0.78rem;font-weight:300;color:var(--muted)}
+.plano-setup{font-size:0.72rem;color:var(--muted);margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border2)}
+.plano-items{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.plano-items li{font-size:0.8rem;font-weight:300;color:var(--muted);display:flex;align-items:flex-start;gap:8px}
+.plano-items li::before{content:'';width:12px;height:1px;background:var(--gold);flex-shrink:0;margin-top:9px}
+.plano-items li strong{color:var(--text);font-weight:500}
+.btn-plano{display:block;text-align:center;font-size:0.78rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:12px;border-radius:2px;transition:all 0.2s}
+.btn-plano.outline{color:var(--gold);border:1px solid var(--border);background:transparent}
+.btn-plano.outline:hover{background:rgba(196,162,101,0.08)}
+.btn-plano.filled{color:var(--bg);background:var(--gold);border:1px solid var(--gold)}
+.btn-plano.filled:hover{background:var(--gold2)}
+
+/* CTA FINAL */
+.cta-final{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:64px 52px;text-align:center;position:relative;overflow:hidden}
+.cta-final::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.cta-final::after{content:'';position:absolute;bottom:-80px;right:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(196,162,101,0.07) 0%,transparent 65%);pointer-events:none}
+.cta-final h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:400;color:var(--text);margin-bottom:14px;position:relative;z-index:1}
+.cta-final h2 em{font-style:italic;color:var(--gold)}
+.cta-final p{font-size:0.9rem;font-weight:300;color:var(--muted);max-width:460px;margin:0 auto 36px;line-height:1.75;position:relative;z-index:1}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border2);padding:36px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-brand{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:rgba(245,242,236,0.3);text-decoration:none}
+.footer-brand sup{font-size:0.45em;color:var(--gold);vertical-align:super}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap}
+.footer-links a{font-size:0.75rem;color:var(--muted);text-decoration:none;transition:color 0.2s}
+.footer-links a:hover{color:var(--gold)}
+.footer-copy{font-size:0.68rem;color:rgba(154,142,122,0.35)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity 0.6s cubic-bezier(0.22,1,0.36,1),transform 0.6s cubic-bezier(0.22,1,0.36,1)}
+.reveal.vis{opacity:1;transform:translateY(0)}
+.rd1{transition-delay:0.07s}.rd2{transition-delay:0.14s}.rd3{transition-delay:0.21s}
+
+@media(max-width:960px){
+  nav{padding:16px 20px}
+  .nav-links{display:none}
+  .hero{padding:90px 24px 64px}
+  .sec{padding:64px 24px}
+  .feat-grid{grid-template-columns:1fr}
+  .feat:first-child,.feat:last-child{border-radius:3px}
+  .planos-grid{grid-template-columns:1fr 1fr}
+  .cta-final{padding:44px 24px}
+  footer{padding:28px 24px;flex-direction:column;align-items:flex-start}
+}
+@media(max-width:560px){
+  .planos-grid{grid-template-columns:1fr}
+  .hero-stats{gap:24px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">Publica<sup>+</sup></a>
+  <div class="nav-links">
+    <a href="#funcionalidades" class="nav-link">Funcionalidades</a>
+    <a href="#como-funciona" class="nav-link">Como funciona</a>
+    <a href="#planos" class="nav-link">Planos</a>
+    <a href="./painel/" class="nav-link">Acessar painel</a>
+    <a href="./cadastro/" class="nav-cta">Começar grátis</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow reveal">EU⁺ Negócio · Publica<sup style="font-size:0.6em;vertical-align:super">+</sup></div>
+    <h1 class="reveal rd1">Seu laboratório<br>e roadmap <em>publicados</em><br>com inteligência.</h1>
+    <p class="hero-sub reveal rd2">Gerencie entradas de conteúdo do seu laboratório e roadmap diretamente do seu painel. Simples, rápido, sem depender de desenvolvedor.</p>
+    <div class="hero-ctas reveal rd3">
+      <a href="./cadastro/" class="btn-primary">Começar grátis</a>
+      <a href="#planos" class="btn-outline">Ver planos</a>
+    </div>
+    <div class="hero-stats reveal rd3">
+      <div><div class="stat-n">3</div><div class="stat-l">Tipos de entrada: Lab, Roadmap e muito mais</div></div>
+      <div><div class="stat-n">∞</div><div class="stat-l">Tipos, status e origens customizáveis</div></div>
+      <div><div class="stat-n">🎤</div><div class="stat-l">Ditado por voz nos campos de texto</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNCIONALIDADES -->
+<section class="sec" id="funcionalidades">
+  <div class="container">
+    <div class="sec-label reveal">Funcionalidades</div>
+    <h2 class="reveal rd1">O básico já <em>surpreende.</em></h2>
+    <p class="sec-sub reveal rd2">Tudo que você precisa para manter seu laboratório e roadmap organizados e publicados — sem complicação.</p>
+    <div class="feat-grid">
+      <div class="feat reveal">
+        <div class="feat-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M6 9h6M6 12h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M6 6h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Laboratório e Roadmap</h3>
+        <p>Duas seções distintas para organizar o que está sendo desenvolvido e o que está planejado — com campos de tipo, status, origem e agente.</p>
+      </div>
+      <div class="feat reveal rd1">
+        <div class="feat-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v12M3 9h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Listas customizáveis</h3>
+        <p>Tipos, status e origens podem ser expandidos com novos valores diretamente pelo painel. Seu vocabulário, sua estrutura.</p>
+      </div>
+      <div class="feat reveal rd2">
+        <div class="feat-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="5.5" y="2" width="4" height="7" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M3 9a6 6 0 0012 0M9 15v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Ditado por voz</h3>
+        <p>Campos de nome e descrição aceitam entrada por voz. Fale, o sistema transcreve. Velocidade real na operação.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.3"/><path d="M9 6v3l2 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Controle de uso</h3>
+        <p>Acompanhe quantas inclusões foram feitas no mês e qual o limite do seu plano — tudo visível no topo do painel.</p>
+      </div>
+      <div class="feat reveal rd1">
+        <div class="feat-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M2 7h14" stroke="currentColor" stroke-width="1.3"/><path d="M7 2v14" stroke="currentColor" stroke-width="1.3"/></svg>
+        </div>
+        <h3>Acesso por e-mail</h3>
+        <p>Login com e-mail e senha enviada automaticamente no cadastro. Sem app, sem complicação — funciona em qualquer dispositivo.</p>
+      </div>
+      <div class="feat reveal rd2">
+        <div class="feat-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M15 5l-8 8-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Setup personalizado</h3>
+        <p>Cada cliente tem sua solução configurada do zero — nomes, cores, campos e integrações — pela equipe EU⁺.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="sec" id="como-funciona">
+  <div class="container">
+    <div class="sec-label reveal">Como funciona</div>
+    <h2 class="reveal rd1">Simples do início <em>ao fim.</em></h2>
+    <p class="sec-sub reveal rd2">Três passos para ter seu conteúdo organizado e publicado.</p>
+    <div class="steps">
+      <div class="step reveal"><div class="step-n">1</div><div class="step-body"><div class="step-label">Cadastro</div><h3>Crie sua conta</h3><p>Preencha nome e e-mail. O sistema gera sua senha automaticamente e envia por e-mail e WhatsApp. Acesso imediato.</p></div></div>
+      <div class="step reveal rd1"><div class="step-n">2</div><div class="step-body"><div class="step-label">Setup</div><h3>A EU⁺ configura para você</h3><p>A equipe EU⁺ faz o setup inicial: personaliza campos, integra com sua estrutura e entrega o painel pronto para usar. Uma vez.</p></div></div>
+      <div class="step reveal rd2"><div class="step-n">3</div><div class="step-body"><div class="step-label">Operação</div><h3>Gerencie pelo painel</h3><p>Entre no painel, adicione ou edite entradas no laboratório ou roadmap. Tudo salvo em tempo real. Sem depender de ninguém.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANOS -->
+<section class="sec" id="planos">
+  <div class="container">
+    <div class="sec-label reveal">Planos</div>
+    <h2 class="reveal rd1">O básico já <em>entrega valor.</em></h2>
+    <p class="sec-sub reveal rd2">Comece grátis, cresça no seu ritmo. Sem cobrança por excesso — o crescimento é natural.</p>
+    <div class="planos-grid">
+
+      <div class="plano-card reveal">
+        <span class="plano-badge">Free</span>
+        <div class="plano-nome">Teste</div>
+        <div class="plano-preco-de">—</div>
+        <div class="plano-preco">R$0<span>/mês</span></div>
+        <div class="plano-setup">Setup: <strong style="color:var(--text)">R$199,90</strong> <span style="text-decoration:line-through;font-size:0.7rem">R$499,90</span></div>
+        <ul class="plano-items">
+          <li>Acesso ao painel</li>
+          <li>Visualização dos itens</li>
+          <li><strong>Sem inclusões</strong> — só visualiza</li>
+          <li>Ideal para avaliação</li>
+        </ul>
+        <a href="./cadastro/?plano=free" class="btn-plano outline">Começar grátis</a>
+      </div>
+
+      <div class="plano-card reveal rd1">
+        <span class="plano-badge">Básico</span>
+        <div class="plano-nome">Organizado</div>
+        <div class="plano-preco-de">R$99,90/mês</div>
+        <div class="plano-preco">R$29,90<span>/mês</span></div>
+        <div class="plano-setup">Setup: <strong style="color:var(--text)">R$199,90</strong> <span style="text-decoration:line-through;font-size:0.7rem">R$499,90</span></div>
+        <ul class="plano-items">
+          <li><strong>50 inclusões/mês</strong></li>
+          <li>Laboratório e Roadmap</li>
+          <li>Tipos e status customizáveis</li>
+          <li>Ditado por voz</li>
+          <li>Suporte por WhatsApp</li>
+        </ul>
+        <a href="./cadastro/?plano=basico" class="btn-plano outline">Escolher Básico</a>
+      </div>
+
+      <div class="plano-card destaque reveal rd2">
+        <span class="plano-badge">Premium</span>
+        <div class="plano-nome">Inteligente</div>
+        <div class="plano-preco-de">R$249,90/mês</div>
+        <div class="plano-preco">R$199,90<span>/mês</span></div>
+        <div class="plano-setup">Setup: <strong style="color:var(--text)">R$199,90</strong> <span style="text-decoration:line-through;font-size:0.7rem">R$499,90</span></div>
+        <ul class="plano-items">
+          <li><strong>500 inclusões/mês</strong></li>
+          <li>Tudo do Básico</li>
+          <li>Prioridade no suporte</li>
+          <li>Relatório mensal de uso</li>
+          <li>Acesso antecipado a novos recursos</li>
+        </ul>
+        <a href="./cadastro/?plano=premium" class="btn-plano filled">Escolher Premium</a>
+      </div>
+
+      <div class="plano-card reveal rd3">
+        <span class="plano-badge">Personalizado</span>
+        <div class="plano-nome">Sob medida</div>
+        <div class="plano-preco-de">—</div>
+        <div class="plano-preco" style="font-size:1.4rem">Consulta</div>
+        <div class="plano-setup">Setup e mensalidade sob consulta</div>
+        <ul class="plano-items">
+          <li>Customizações avançadas</li>
+          <li>Integrações específicas</li>
+          <li>Campos personalizados</li>
+          <li>SLA garantido</li>
+          <li>Suporte dedicado</li>
+        </ul>
+        <a href="https://wa.me/5527998131806?text=Olá%2C%20quero%20saber%20sobre%20o%20Publica%2B%20Personalizado." target="_blank" class="btn-plano outline">Falar com a equipe</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="sec">
+  <div class="container">
+    <div class="cta-final reveal">
+      <div class="sec-label" style="justify-content:center;margin-bottom:16px">
+        <span>Comece hoje</span>
+      </div>
+      <h2>Seu conteúdo organizado.<br><em>Sua operação no controle.</em></h2>
+      <p>Cadastre-se agora e receba acesso imediato ao painel. Setup feito pela equipe EU⁺. Suporte real. Sem burocracia.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1">
+        <a href="./cadastro/" class="btn-primary">Criar minha conta</a>
+        <a href="./painel/" class="btn-outline">Já tenho conta →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a href="#" class="footer-brand">Publica<sup>+</sup></a>
+  <div class="footer-links">
+    <a href="#funcionalidades">Funcionalidades</a>
+    <a href="#planos">Planos</a>
+    <a href="./cadastro/">Cadastro</a>
+    <a href="./painel/">Painel</a>
+    <a href="https://www.eumaisempresa.com.br">Portal EU⁺</a>
+  </div>
+  <p class="footer-copy">© 2026 EU⁺ Negócio · Grupo EU⁺ · eumaisempresa@gmail.com</p>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('vis'); obs.unobserve(e.target); } });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+setTimeout(() => document.querySelectorAll('.hero .reveal').forEach(el => el.classList.add('vis')), 80);
+</script>
+</body>
+</html>
