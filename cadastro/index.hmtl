@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EU⁺ Publica+ · Cadastro</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#161616;--bg2:#1C1C1C;--bg3:#222222;
+  --gold:#C4A265;--gold2:#D4B483;
+  --text:#F5F2EC;--muted:#9A8E7A;
+  --border:rgba(196,162,101,0.18);--border2:rgba(196,162,101,0.08);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.wrap{width:100%;max-width:460px}
+.logo{text-align:center;margin-bottom:8px}
+.logo-eu{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--muted)}
+.logo-eu span{color:var(--gold);font-weight:600}
+.logo-prod{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:600;color:var(--text);margin-bottom:6px}
+.logo-prod sup{font-size:0.5em;color:var(--gold);vertical-align:super}
+.tag{text-align:center;font-size:0.82rem;font-weight:300;font-style:italic;color:var(--gold);margin-bottom:40px}
+
+.box{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:40px 32px;position:relative;overflow:hidden}
+.box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.box h2{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;color:var(--text);margin-bottom:6px;text-align:center}
+.box p.sub{font-size:0.8rem;font-weight:300;color:var(--muted);text-align:center;margin-bottom:32px;line-height:1.6}
+
+.f{margin-bottom:16px}
+.f label{display:block;font-size:0.65rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.f input,.f select{width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:13px 14px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:300;border-radius:2px;outline:none;transition:border-color 0.2s}
+.f input:focus,.f select:focus{border-color:var(--gold)}
+.f input::placeholder{color:rgba(245,242,236,0.2)}
+
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+.plan-card{border:1px solid var(--border2);border-radius:2px;padding:14px 12px;cursor:pointer;transition:all 0.2s;text-align:center;background:var(--bg3)}
+.plan-card.active{border-color:var(--gold);background:rgba(196,162,101,0.08)}
+.plan-name{font-size:0.78rem;font-weight:600;color:var(--text);margin-bottom:3px}
+.plan-price{font-size:0.68rem;font-weight:300;color:var(--gold)}
+
+.btn-submit{width:100%;background:var(--gold);color:var(--bg);border:none;padding:15px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:background 0.2s}
+.btn-submit:hover{background:var(--gold2)}
+.btn-submit:disabled{opacity:0.5;cursor:not-allowed}
+
+.msg{font-size:0.78rem;text-align:center;margin-top:14px;padding:10px;border-radius:2px;display:none}
+.msg.erro{display:block;background:rgba(220,80,80,0.1);color:#E08080;border:1px solid rgba(220,80,80,0.2)}
+.msg.sucesso{display:block;background:rgba(122,173,102,0.1);color:#A8CC94;border:1px solid rgba(122,173,102,0.2)}
+
+.success-box{display:none;text-align:center}
+.success-box.show{display:block}
+.success-icon{font-size:2.5rem;color:var(--gold);margin-bottom:16px}
+.success-box h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:400;margin-bottom:12px}
+.success-box p{font-size:0.85rem;color:var(--muted);line-height:1.7;margin-bottom:24px}
+.success-id{background:var(--bg3);border:1px solid var(--border2);border-radius:2px;padding:14px;margin-bottom:20px;font-family:monospace;font-size:0.85rem;color:var(--gold)}
+.btn-wpp{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#0a0a0a;text-decoration:none;padding:13px 24px;border-radius:2px;font-size:0.8rem;font-weight:600;letter-spacing:0.06em}
+.btn-painel{display:block;margin-top:14px;font-size:0.78rem;color:var(--gold);text-decoration:none}
+
+.footer-link{text-align:center;margin-top:24px;font-size:0.75rem;color:var(--muted)}
+.footer-link a{color:var(--gold);text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="logo">
+    <div class="logo-eu">EU<sup style="font-size:0.6em;vertical-align:super">+</sup> Negócio</div>
+    <div class="logo-prod">Publica<sup>+</sup></div>
+  </div>
+  <p class="tag">"O conteúdo que move seu negócio para frente."</p>
+
+  <div class="box" id="formBox">
+    <h2>Crie sua conta</h2>
+    <p class="sub">Comece agora e ganhe acesso ao seu painel de gestão de conteúdo.</p>
+
+    <form id="formCadastro" onsubmit="cadastrar(event)">
+      <div class="f">
+        <label>Nome completo</label>
+        <input type="text" id="nome" required placeholder="Seu nome ou da empresa">
+      </div>
+      <div class="f">
+        <label>E-mail — será seu login</label>
+        <input type="email" id="email" required placeholder="seu@email.com">
+      </div>
+
+      <div class="f">
+        <label>Escolha seu plano</label>
+        <div class="plans">
+          <div class="plan-card active" data-plano="free" onclick="selecionarPlano(this)">
+            <div class="plan-name">Free</div>
+            <div class="plan-price">Teste grátis</div>
+          </div>
+          <div class="plan-card" data-plano="basico" onclick="selecionarPlano(this)">
+            <div class="plan-name">Básico</div>
+            <div class="plan-price">R$29,90/mês</div>
+          </div>
+          <div class="plan-card" data-plano="premium" onclick="selecionarPlano(this)">
+            <div class="plan-name">Premium</div>
+            <div class="plan-price">R$199,90/mês</div>
+          </div>
+          <div class="plan-card" data-plano="personalizado" onclick="selecionarPlano(this)">
+            <div class="plan-name">Personalizado</div>
+            <div class="plan-price">Sob consulta</div>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="btnSubmit">Criar minha conta</button>
+      <div class="msg" id="msg"></div>
+    </form>
+  </div>
+
+  <div class="box success-box" id="successBox">
+    <div class="success-icon">✓</div>
+    <h3>Cadastro realizado!</h3>
+    <p>Enviamos sua senha de acesso para o e-mail informado. Guarde-a com segurança.</p>
+    <div class="success-id" id="successId"></div>
+    <a href="#" id="linkWpp" target="_blank" class="btn-wpp">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1C4.46 1 2 3.46 2 6.5c0 1.04.28 2.02.78 2.86L2 13l3.78-.99A5.46 5.46 0 007.5 12c3.04 0 5.5-2.46 5.5-5.5S10.54 1 7.5 1z" stroke="currentColor" stroke-width="1.3"/></svg>
+      Confirmar via WhatsApp
+    </a>
+    <a href="../painel/" class="btn-painel">Ir para o painel agora →</a>
+  </div>
+
+  <p class="footer-link">Já tem conta? <a href="../painel/">Acesse seu painel</a></p>
+</div>
+
+<script>
+const API_URL = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
+let planoSelecionado = "free";
+
+function selecionarPlano(el) {
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  planoSelecionado = el.dataset.plano;
+}
+
+async function cadastrar(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btnSubmit');
+  const msg = document.getElementById('msg');
+  btn.disabled = true;
+  btn.textContent = 'Criando conta...';
+  msg.className = 'msg';
+
+  const payload = {
+    action: 'cadastrar',
+    nome: document.getElementById('nome').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    plano: planoSelecionado
+  };
+
+  try {
+    const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
+    const data = await res.json();
+
+    if (data.status === 'sucesso') {
+      document.getElementById('formBox').style.display = 'none';
+      document.getElementById('successBox').classList.add('show');
+      document.getElementById('successId').textContent = 'ID: ' + data.idCliente + ' · Plano: ' + planoSelecionado;
+      document.getElementById('linkWpp').href = data.linkWpp;
+    } else {
+      msg.textContent = data.message || 'Erro ao cadastrar.';
+      msg.className = 'msg erro';
+    }
+  } catch (err) {
+    msg.textContent = 'Erro de conexão. Tente novamente.';
+    msg.className = 'msg erro';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Criar minha conta';
+}
+</script>
+</body>
+</html>
